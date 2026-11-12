@@ -1,0 +1,61 @@
+# This configuration file requires clang-format version 19 or newer.
+# https://github.com/llvm/llvm-project/
+#
+# For more about coding style, see
+# - https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# - https://google.github.io/styleguide/cppguide.html
+
+BasedOnStyle: Google
+
+# clang-format version 10.0.0 does not accept `Language=C`` or `Standard=c11`, we use the C++ standard version most close to instead.
+Language: Cpp
+Standard: c++11
+
+# Include sorting and grouping: C standard, ESP-IDF, third-party, project.
+IncludeBlocks: Regroup
+SortIncludes: true
+
+# Disable the special category 0 for a source file's matching header.
+IncludeIsMainRegex: 'a^'
+
+IncludeCategories:
+  # C standard library headers (single-quoted YAML needs only one backslash).
+  - Regex: '^<(assert|complex|ctype|errno|fenv|float|inttypes|iso646|limits|locale|math|setjmp|signal|stdalign|stdarg|stdatomic|stdbit|stdbool|stdckdint|stddef|stdint|stdio|stdlib|stdnoreturn|string|tgmath|threads|time|uchar|wchar|wctype)\.h>$'
+    Priority: 1
+
+  # ESP-IDF headers, including component paths and bundled FreeRTOS/lwIP.
+  - Regex: '^[<"](esp_[^">]*|driver/[^">]*|hal/[^">]*|soc/[^">]*|freertos/[^">]*|lwip/[^">]*|nvs[^">]*|sdkconfig)\.h[">]$'
+    Priority: 2
+
+  # Project headers: keep this list in sync when adding local headers.
+  - Regex: '^[<"](app_state|app_types|content|display|network|settings|web)\.h[">]$'
+    Priority: 4
+
+  # All remaining headers belong to third-party libraries (e.g. cJSON/u8g2).
+  - Regex: '.*'
+    Priority: 3
+
+# Formatting preferences
+ColumnLimit: 160
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+# Keep one blank line between functions and logical groups (includes, constants,
+# file-level state).
+MaxEmptyLinesToKeep: 1
+KeepEmptyLines:
+  AtStartOfFile: false
+  AtStartOfBlock: false
+  AtEndOfFile: false
+# Insert separators between definitions:
+SeparateDefinitionBlocks: Always
+
+# Pointer alignment (Google style uses Left)
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: Inline
+SpacesInParentheses: false
+SpaceBeforeParens: ControlStatements
